@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"github.com/joho/godotenv"
 	"log/slog"
 	"os"
 	"os/signal"
@@ -11,7 +12,8 @@ import (
 )
 
 var (
-	session, _     = discordgo.New("Bot ")
+	_              = godotenv.Load()
+	session, _     = discordgo.New(fmt.Sprintf("Bot %v", os.Getenv("TOKEN")))
 	RemoveCommands = flag.Bool("rmcmd", true, "Remove all commands after shutdowning or not")
 
 	integerOptionMinValue = 100.0
