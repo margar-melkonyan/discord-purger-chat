@@ -7,7 +7,6 @@ on:
 jobs:
   deploy:
     env:
-      HOST: root@{{ secrets.IP_ADDRESS }}
       DEPLOY_DIRECTORY: /usr/local/src/apps/discord-purger-chat
     runs-on: ubuntu-latest
     steps:
@@ -18,8 +17,8 @@ jobs:
           sudo apt-get install ssh
           echo "$DEPLOY_SSH_KEY" > deploy_key.pem
           chmod 600 deploy_key.pem
-          ssh {{ env.HOST }} -i deploy_key.pem "mkdir -p ${{ env.DEPLOY_DIRECTORY }}"
-          rsync -avz -e 'ssh -i deploy_key.pem -o StrictHostKeyChecking=no' --exclude='.git' ./ ${{ env.HOST }}:${{ env.DEPLOY_DIRECTORY }}
+          ssh ${{ secrets.HOST }} -i deploy_key.pem "mkdir -p ${{ env.DEPLOY_DIRECTORY }}"
+          rsync -avz -e 'ssh -i deploy_key.pem -o StrictHostKeyChecking=no' --exclude='.git' ./ ${{ secrets.HOST }}{{ secrets.IP_ADDRESS }}:${{ env.DEPLOY_DIRECTORY }}
         env:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
       - name: Show info
