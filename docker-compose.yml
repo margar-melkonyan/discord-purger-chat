@@ -5,3 +5,6 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./
+    command: sh -c "mv ./app ./bin && ./bin/app"
+    volumes:
+      - "${PWD}/bin/:/usr/local/src/bin/"
