@@ -94,6 +94,8 @@ func main() {
 
 	registeredCommands := make([]*discordgo.ApplicationCommand, len(commands))
 
+	slog.Info("Adding commands...")
+
 	for _, guild := range guilds {
 		for i, command := range commands {
 			cmd, err := session.ApplicationCommandCreate(session.State.User.ID, guild.ID, command)
@@ -104,7 +106,7 @@ func main() {
 		}
 	}
 
-	slog.Info("Adding commands...")
+	slog.Info("Done adding commands!")
 
 	session.Identify.Intents = discordgo.IntentsAllWithoutPrivileged
 
