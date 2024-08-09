@@ -10,6 +10,5 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Show info
-        with:
-          script: |
-            ls
+        run: |
+          ls
