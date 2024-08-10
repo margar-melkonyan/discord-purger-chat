@@ -16,6 +16,7 @@ jobs:
           echo "$DEPLOY_SSH_KEY" > deploy_key.pem
           chmod 600 deploy_key.pem
           ssh ${{ secrets.HOST }} -i deploy_key.pem "mkdir -p ${{ env.DEPLOY_DIRECTORY }}"
+
         env:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
       - name: Show info
