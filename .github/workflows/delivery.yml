@@ -21,4 +21,4 @@ jobs:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
       - name: Show info
         run: |
-          ssh {{ env.HOST }} -i deploy_key.pem "cd ${{ env.DEPLOY_DIRECTORY }} && ls"
+          ssh {{ secrets.HOST }} -i deploy_key.pem "cd ${{ env.DEPLOY_DIRECTORY }} && ls"
