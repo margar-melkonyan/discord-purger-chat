@@ -23,4 +23,4 @@ jobs:
       - name: Sync data
         run: |
           ssh -o "StrictHostKeyChecking=no" ${{ secrets.HOST }} -i deploy_key.pem "cd ${{ env.DEPLOY_DIRECTORY }}"
-          rsync -avz -e 'ssh -i deploy_key.pem -o StrictHostKeyChecking=no' --exclude='.git' ./ ${{ env.HOST }}:${{ env.DEPLOY_DIRECTORY }}
+          rsync -avz -e 'ssh -i deploy_key.pem -o StrictHostKeyChecking=no' --exclude='.git' ./ ${{ secrets.HOST }}:${{ env.DEPLOY_DIRECTORY }}
