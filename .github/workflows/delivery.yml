@@ -10,15 +10,17 @@ jobs:
       DEPLOY_DIRECTORY: /usr/local/src/apps/discord-purger-chat
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Create workdir
         run: |
           sudo apt-get install ssh
           echo "$DEPLOY_SSH_KEY" > deploy_key.pem
           chmod 600 deploy_key.pem
           ssh -o "StrictHostKeyChecking=no" ${{ secrets.HOST }} -i deploy_key.pem "mkdir -p ${{ env.DEPLOY_DIRECTORY }}"
-
         env:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-      - name: Show info
+      - name: Sync data
         run: |
-          ssh -o "StrictHostKeyChecking=no" ${{ secrets.HOST }} -i deploy_key.pem "cd ${{ env.DEPLOY_DIRECTORY }} && ls"
+          ssh -o "StrictHostKeyChecking=no" ${{ secrets.HOST }} -i deploy_key.pem "cd ${{ env.DEPLOY_DIRECTORY }}"
+          rsync -avz -e 'ssh -i deploy_key.pem -o StrictHostKeyChecking=no' --exclude='.git' ./ ${{ env.HOST }}:${{ env.DEPLOY_DIRECTORY }}
