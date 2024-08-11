@@ -8,8 +8,6 @@ jobs:
   deploy:
     env:
       DEPLOY_DIRECTORY: /usr/local/src/apps/discord-purger-chat
-      ENV_FILE_PATH: /usr/local/src/apps/discord-purger-chat/bin/config.env
-      CONFIG_PATH: /usr/local/src/apps/discord-purger-chat/.env
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,10 +28,6 @@ jobs:
         run: ssh -o "StrictHostKeyChecking=no" ${{ secrets.HOST }} -i deploy_key.pem "cd ${{ env.DEPLOY_DIRECTORY }} && docker-compose up -d"
       - name: Copy systemd service file
         run: |
-          ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ secrets.HOST }} "\
-          touch ${{ env.ENV_FILE_PATH }} && \
-          chmod 600 ${{ env.ENV_FILE_PATH }} && \
-          echo 'CONFIG_PATH=${{ env.CONFIG_PATH }}' > ${{ env.ENV_FILE_PATH }}"
           scp -i deploy_key.pem -o StrictHostKeyChecking=no ${{ github.workspace }}/deployment/discord-purger-chat.service ${{ secrets.HOST }}:/tmp/discord-purger-chat.service
           ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ secrets.HOST }} "mv /tmp/discord-purger-chat.service /etc/systemd/system/discord-purger-chat.service"
       - name: Start application

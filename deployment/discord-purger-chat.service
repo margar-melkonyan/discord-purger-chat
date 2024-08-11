@@ -9,7 +9,7 @@ ExecStart=/usr/local/src/apps/discord-purger-chat/bin/app
 Restart=always
 RestartSec=4
 StandardOutput=inherit
-EnvironmentFile=/usr/local/src/apps/discord-purger-chat/bin/config.env
+EnvironmentFile=/usr/local/src/apps/discord-purger-chat/.env
 
 [Install]
 WantedBy=multi-user.target
