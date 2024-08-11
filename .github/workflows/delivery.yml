@@ -19,8 +19,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.tag }}
-                 - name: Check if tag exists
-                 run: |
+      - name: Check if tag exists
+        run: |
                    git fetch --all --tags
                    if ! git tag | grep -q "^${{ github.event.inputs.tag }}$"; then
                      echo "error: Tag '${{ github.event.inputs.tag }}' not found"
