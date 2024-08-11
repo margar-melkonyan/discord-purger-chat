@@ -1,8 +1,13 @@
 name: Delivery
 on:
-  push:
-    branches:
-      - main
+#  push:
+#    branches:
+#      - main
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to deploy'
+        required: true
 
 jobs:
   deploy:
@@ -12,6 +17,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag }}
+                 - name: Check if tag exists
+                 run: |
+                   git fetch --all --tags
+                   if ! git tag | grep -q "^${{ github.event.inputs.tag }}$"; then
+                     echo "error: Tag '${{ github.event.inputs.tag }}' not found"
+                     exit 1
+                   fi
       - name: Create workdir
         run: |
           sudo apt-get install ssh
@@ -25,7 +39,7 @@ jobs:
           ssh -o "StrictHostKeyChecking=no" ${{ secrets.HOST }} -i deploy_key.pem "cd ${{ env.DEPLOY_DIRECTORY }} && touch .env && echo TOKEN=${{ secrets.APP_TOKEN}} > .env"
           rsync -avz -e 'ssh -i deploy_key.pem -o StrictHostKeyChecking=no' --exclude='.git' ./ ${{ secrets.HOST }}:${{ env.DEPLOY_DIRECTORY }}
       - name: Build and start app
-        run: ssh -o "StrictHostKeyChecking=no" ${{ secrets.HOST }} -i deploy_key.pem "cd ${{ env.DEPLOY_DIRECTORY }} && docker-compose up -d"
+        run: ssh -o "StrictHostKeyChecking=no" ${{ secrets.HOST }} -i deploy_key.pem "cd ${{ env.DEPLOY_DIRECTORY }} && docker-compose up -d && docker-compose down"
       - name: Copy systemd service file
         run: |
           scp -i deploy_key.pem -o StrictHostKeyChecking=no ${{ github.workspace }}/deployment/discord-purger-chat.service ${{ secrets.HOST }}:/tmp/discord-purger-chat.service
