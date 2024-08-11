@@ -34,7 +34,7 @@ jobs:
           touch ${{ env.ENV_FILE_PATH }} && \
           chmod 600 ${{ env.ENV_FILE_PATH }} && \
           echo 'CONFIG_PATH=${{ env.CONFIG_PATH }}' > ${{ env.ENV_FILE_PATH }}"
-          scp -i deploy_key.pem -o StrictHostKeyChecking=no ${{ github.workspace }}/deployment/discord-purger-chat.service ${{ env.HOST }}:/tmp/discord-purger-chat.service
+          scp -i deploy_key.pem -o StrictHostKeyChecking=no ${{ github.workspace }}/deployment/discord-purger-chat.service ${{ secrets.HOST }}:/tmp/discord-purger-chat.service
           ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ secrets.HOST }} "mv /tmp/discord-purger-chat.service /etc/systemd/system/discord-purger-chat.service"
       - name: Start application
         run: |
