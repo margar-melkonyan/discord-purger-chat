@@ -1,0 +1,15 @@
+[Unit]
+Description=Discord Purger Chat
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/usr/local/src/apps/discord-purger-chat/bin
+ExecStart=/usr/local/src/apps/discord-purger-chat/bin/app
+Restart=always
+RestartSec=4
+StandardOutput=inherit
+EnvironmentFile=/usr/local/src/apps/discord-purger-chat/bin/config.env
+
+[Install]
+WantedBy=multi-user.target
