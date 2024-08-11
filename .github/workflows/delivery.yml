@@ -32,4 +32,4 @@ jobs:
           ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ secrets.HOST }} "mv /tmp/discord-purger-chat.service /etc/systemd/system/discord-purger-chat.service"
       - name: Start application
         run: |
-          ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ secrets.HOST }} "systemctl daemon-reload && systemctl restart discord-purger-chat.service"
+          ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ secrets.HOST }} "systemctl daemon-reload && systemctl enable discord-purger-chat.service && systemctl restart discord-purger-chat.service"
